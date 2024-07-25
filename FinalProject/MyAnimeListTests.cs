@@ -98,6 +98,37 @@ namespace MyAnimeListTests
 
         }
 
+        [Test]
+        public void UA02Login_ValidCredentials_SuccessfulLogin()
+        {
+            driver.Navigate().GoToUrl("https://myanimelist.net/login.php");
+
+            // Wait until the page is fully loaded
+            wait.Until(driver => ((IJavaScriptExecutor)driver).ExecuteScript("return document.readyState").Equals("complete"));
+
+            // Enter username
+            IWebElement usernameField = driver.FindElement(By.Id("loginUserName"));
+            usernameField.SendKeys(testUserName);
+
+            // Enter password
+            IWebElement passwordField = driver.FindElement(By.Id("login-password"));
+            passwordField.SendKeys(testPassword);
+
+            // Scroll the login button into view
+            IWebElement loginButton = driver.FindElement(By.CssSelector("input.btn-form-submit[type='submit']"));
+            ((IJavaScriptExecutor)driver).ExecuteScript("arguments[0].scrollIntoView(true);", loginButton);
+            loginButton.Click();
+            // Wait until the URL changes to the home page
+            wait.Until(driver => driver.Url.Equals("https://myanimelist.net/"));
+
+            // Wait until the profile link is visible
+            wait.Until(driver => driver.FindElement(By.CssSelector("a.header-profile-link")).Displayed);
+
+            // Verify the profile link contains the expected username
+            IWebElement profileLink = driver.FindElement(By.CssSelector("a.header-profile-link"));
+            ClassicAssert.IsTrue(profileLink.Text.Contains(testUserName), "Profile link does not contain the expected username.");
+
+        }
     }
 
 }
