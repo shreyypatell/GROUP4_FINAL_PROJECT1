@@ -168,6 +168,53 @@ namespace MyAnimeListTests
             // Optionally verify that the URL is still the login page
             ClassicAssert.AreEqual("https://myanimelist.net/login.php", driver.Url);
         }
+
+        [Test]
+        public void UA04PasswordReset_ValidInput_SuccessMessage()
+        {
+            string testUserName = "test638581436666";
+            string testEmail = "d5af0476-f87a-4c86-b807-167d390976e1@belgianairways.com";
+
+            driver.Navigate().GoToUrl("https://myanimelist.net/password.php");
+
+            // Wait until the page is fully loaded
+            wait.Until(driver => ((IJavaScriptExecutor)driver).ExecuteScript("return document.readyState").Equals("complete"));
+
+            // Enter username
+            IWebElement usernameField = driver.FindElement(By.Name("user_name"));
+            usernameField.SendKeys(testUserName);
+
+            // Enter email
+            IWebElement emailField = driver.FindElement(By.Name("email"));
+            emailField.SendKeys(testEmail);
+
+            // Scroll the request password button into view and click it
+            IWebElement requestPasswordButton = driver.FindElement(By.CssSelector("input.btn-form-submit[type='submit']"));
+            ((IJavaScriptExecutor)driver).ExecuteScript("arguments[0].scrollIntoView(true);", requestPasswordButton);
+            requestPasswordButton.Click();
+
+            // Wait for the success message to be visible
+            wait.Until(driver =>
+            {
+                try
+                {
+                    IWebElement successMessageElement = driver.FindElement(By.CssSelector("div.goodresult"));
+                    return successMessageElement.Displayed && successMessageElement.Text.Contains("An e-mail has been successfully sent to");
+                }
+                catch (NoSuchElementException)
+                {
+                    return false;
+                }
+            });
+
+            // Verify the success message
+            string successMessage = driver.FindElement(By.CssSelector("div.goodresult")).Text;
+            ClassicAssert.IsTrue(successMessage.Contains("An e-mail has been successfully sent to"), "Success message is not displayed or is incorrect.");
+
+            // Optionally, verify the URL remains the same or other final checks
+            ClassicAssert.AreEqual("https://myanimelist.net/password.php", driver.Url);
+        }
+
     }
 
 }
