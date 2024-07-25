@@ -47,5 +47,57 @@ namespace MyAnimeListTests
         {
             driver.Quit();
         }
+
+        // User Registration and Authentication
+        [Test]
+        public async Task UA01UserRegistration_ValidInput_SuccessfulRegistration()
+        {
+            string testEmail = await emailService.GenerateTemporaryEmailAndGetEmailAsync(testPassword);
+            string testUserName = "test" + DateTime.Now.Ticks.ToString().Substring(0, 12); ;
+
+            driver.Navigate().GoToUrl("https://myanimelist.net/register.php");
+
+            // Wait until the page is fully loaded
+            wait.Until(driver => ((IJavaScriptExecutor)driver).ExecuteScript("return document.readyState").Equals("complete"));
+
+            // Enter email
+            IWebElement emailField = driver.FindElement(By.Id("loginEmail"));
+            emailField.SendKeys(testEmail);
+
+            // Enter username
+            IWebElement usernameField = driver.FindElement(By.Name("user_name"));
+            usernameField.SendKeys(testUserName);
+
+            // Enter password
+            IWebElement passwordField = driver.FindElement(By.Id("password"));
+            passwordField.SendKeys(testPassword);
+
+            // Select birthday
+            SelectElement monthSelect = new SelectElement(driver.FindElement(By.Name("birthday[month]")));
+            monthSelect.SelectByValue("1");  // January
+
+            SelectElement daySelect = new SelectElement(driver.FindElement(By.Name("birthday[day]")));
+            daySelect.SelectByValue("1");    // 1st day
+
+            SelectElement yearSelect = new SelectElement(driver.FindElement(By.Name("birthday[year]")));
+            yearSelect.SelectByValue("2000"); // Year 2000
+
+            // 'Create Account' button
+            IWebElement createAccountButton = driver.FindElement(By.Id("create-account"));
+
+            // Wait until the 'Create Account' button is enabled
+            wait.Until(driver => createAccountButton.Enabled);
+            createAccountButton.Click();
+
+            // Wait for the success message to appear
+            wait.Until(ExpectedConditions.ElementIsVisible(By.Id("ga_goodresult")));
+
+            // Verify that the success message is displayed
+            IWebElement successMessage = driver.FindElement(By.Id("ga_goodresult"));
+            ClassicAssert.IsTrue(successMessage.Displayed);
+
+        }
+
     }
+
 }
