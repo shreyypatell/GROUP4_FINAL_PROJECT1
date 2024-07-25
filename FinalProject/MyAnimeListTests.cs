@@ -129,6 +129,45 @@ namespace MyAnimeListTests
             ClassicAssert.IsTrue(profileLink.Text.Contains(testUserName), "Profile link does not contain the expected username.");
 
         }
+
+        [Test]
+        public void UA03Login_InvalidCredentials_ErrorDisplayed()
+        {
+            string invalidTestPassword = "#ME@123Invalid";
+            driver.Navigate().GoToUrl("https://myanimelist.net/login.php");
+
+            // Wait until the page is fully loaded
+            wait.Until(driver => ((IJavaScriptExecutor)driver).ExecuteScript("return document.readyState").Equals("complete"));
+
+            // Enter username
+            IWebElement usernameField = driver.FindElement(By.Id("loginUserName"));
+            usernameField.SendKeys(testUserName);
+
+            // Enter password
+            IWebElement passwordField = driver.FindElement(By.Id("login-password"));
+            passwordField.SendKeys(invalidTestPassword);
+
+            // Scroll the login button into view
+            IWebElement loginButton = driver.FindElement(By.CssSelector("input.btn-form-submit[type='submit']"));
+            ((IJavaScriptExecutor)driver).ExecuteScript("arguments[0].scrollIntoView(true);", loginButton);
+
+            loginButton.Click();
+
+            // Wait for the error message to be displayed
+            wait.Until(driver =>
+            {
+                IWebElement errorMessageElement = driver.FindElement(By.CssSelector("div.badresult"));
+                return errorMessageElement.Displayed && errorMessageElement.Text.Contains("Your username or password is incorrect.");
+            });
+
+
+            // Verify the error message
+            string errorMessage = driver.FindElement(By.CssSelector("div.badresult")).Text;
+            ClassicAssert.IsTrue(errorMessage.Contains("Your username or password is incorrect."), "Error message is not displayed or is incorrect.");
+
+            // Optionally verify that the URL is still the login page
+            ClassicAssert.AreEqual("https://myanimelist.net/login.php", driver.Url);
+        }
     }
 
 }
