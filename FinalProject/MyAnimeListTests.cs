@@ -29,8 +29,6 @@ namespace MyAnimeListTests
         public async Task Setup()
         {
 
-            // Change user agent to mimic a real browser
-
             driver = new FirefoxDriver();
 
             wait = new WebDriverWait(driver, TimeSpan.FromSeconds(100));
@@ -38,14 +36,42 @@ namespace MyAnimeListTests
             emailService = new EmailService();
 
             testEmail = await emailService.RegisterAndGetEmailAsync();
-
-
         }
 
         [TearDown]
         public void Teardown()
         {
             driver.Quit();
+        }
+
+        private void Login()
+        {
+
+            // Navigate to the login page
+            driver.Navigate().GoToUrl("https://myanimelist.net/login.php");
+
+            // Wait until the page is fully loaded
+            wait.Until(driver => ((IJavaScriptExecutor)driver).ExecuteScript("return document.readyState").Equals("complete"));
+
+            // Enter username
+            IWebElement usernameField = wait.Until(ExpectedConditions.ElementIsVisible(By.Id("loginUserName")));
+            usernameField.SendKeys(testUserName);
+
+            // Enter password
+            IWebElement passwordField = driver.FindElement(By.Id("login-password"));
+            passwordField.SendKeys(testPassword);
+
+            // Scroll the login button into view
+            IWebElement loginButton = driver.FindElement(By.CssSelector("input.btn-form-submit[type='submit']"));
+            ((IJavaScriptExecutor)driver).ExecuteScript("arguments[0].scrollIntoView(true);", loginButton);
+            loginButton.Click();
+
+            // Wait until redirected to the home page
+            wait.Until(driver => driver.Url.Contains("myanimelist.net"));
+            wait.Until(driver => ((IJavaScriptExecutor)driver).ExecuteScript("return document.readyState").Equals("complete"));
+
+            wait.Until(driver => driver.FindElement(By.CssSelector("a.header-profile-link")).Displayed);
+
         }
 
         // User Registration and Authentication
