@@ -215,6 +215,45 @@ namespace MyAnimeListTests
             ClassicAssert.AreEqual("https://myanimelist.net/password.php", driver.Url);
         }
 
+        [Test]
+        public void UA05ForgotUserName_ValidEmail_SuccessMessage()
+        {
+            driver.Navigate().GoToUrl("https://myanimelist.net/password.php?username=1");
+
+            // Wait until the page is fully loaded
+            wait.Until(driver => ((IJavaScriptExecutor)driver).ExecuteScript("return document.readyState").Equals("complete"));
+
+            // Enter email
+            IWebElement emailField = driver.FindElement(By.Name("email"));
+            emailField.SendKeys(testEmail);
+
+            // Scroll the request password button into view and click it
+            IWebElement requestPasswordButton = driver.FindElement(By.CssSelector("input.btn-form-submit[type='submit']"));
+            ((IJavaScriptExecutor)driver).ExecuteScript("arguments[0].scrollIntoView(true);", requestPasswordButton);
+            requestPasswordButton.Click();
+
+            // Wait for the success message to be visible
+            wait.Until(driver =>
+            {
+                try
+                {
+                    var successMessageElement = driver.FindElement(By.CssSelector("div.goodresult"));
+                    return successMessageElement.Displayed && successMessageElement.Text.Contains("An e-mail has been successfully sent.");
+                }
+                catch (NoSuchElementException)
+                {
+                    return false;
+                }
+            });
+
+            // Verify the success message
+            var successMessage = driver.FindElement(By.CssSelector("div.goodresult")).Text;
+            ClassicAssert.IsTrue(successMessage.Contains("An e-mail has been successfully sent."), "Success message is not displayed or is incorrect.");
+
+            // Optionally, verify the URL remains the same or other final checks
+            ClassicAssert.AreEqual("https://myanimelist.net/password.php?username=1", driver.Url);
+        }
+
     }
 
 }
