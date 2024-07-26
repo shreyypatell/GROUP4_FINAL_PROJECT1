@@ -334,6 +334,62 @@ namespace MyAnimeListTests
 
         }
 
+        [Test]
+        public void AS02AnimeAdvancedSearchWithFilters_ValidFilters_FilteredResultsDisplayed()
+        {
+            // Navigate to the anime search page
+            driver.Navigate().GoToUrl("https://myanimelist.net/anime.php");
+
+            // Wait for the page to fully load
+            wait.Until(driver => ((IJavaScriptExecutor)driver).ExecuteScript("return document.readyState").Equals("complete"));
+
+            // Perform a basic search
+            IWebElement searchBox = driver.FindElement(By.Id("q"));
+            searchBox.SendKeys("Naruto");
+
+            // Click on the Advanced Search link
+            IWebElement advancedSearchLink = driver.FindElement(By.CssSelector("a[data-ga-click-type='list-add-anime-advanced-window']"));
+
+            // Scroll the advanced search link into view
+            ((IJavaScriptExecutor)driver).ExecuteScript("arguments[0].scrollIntoView(true);", advancedSearchLink);
+
+            // Ensure no other elements are obstructing the clickable element
+            wait.Until(ExpectedConditions.ElementToBeClickable(advancedSearchLink));
+
+            // Click the advanced search 
+            ((IJavaScriptExecutor)driver).ExecuteScript("arguments[0].click();", advancedSearchLink);
+
+            // Apply filters 
+            SelectElement typeFilter = new SelectElement(driver.FindElement(By.Id("filterByType")));
+            typeFilter.SelectByValue("1"); // TV
+
+            SelectElement scoreFilter = new SelectElement(driver.FindElement(By.Id("score")));
+            scoreFilter.SelectByValue("8"); // Very Good
+
+            SelectElement statusFilter = new SelectElement(driver.FindElement(By.Id("status")));
+            statusFilter.SelectByValue("2"); // Finished Airing
+
+            SelectElement ratedFilter = new SelectElement(driver.FindElement(By.Id("r")));
+            ratedFilter.SelectByValue("3"); // PG-13 - Teens 13 or older
+
+            // Click the search button
+            IWebElement searchButton = driver.FindElement(By.CssSelector("input[data-ga-click-type='list-add-anime-advanced-search']"));
+            ((IJavaScriptExecutor)driver).ExecuteScript("arguments[0].scrollIntoView(true);", searchButton);
+            searchButton.Click();
+
+            // Wait for the search results to load
+            wait.Until(driver => ((IJavaScriptExecutor)driver).ExecuteScript("return document.readyState").Equals("complete"));
+
+            // Verify the search results contain "Naruto"
+            bool isNarutoPresent = driver.FindElements(By.CssSelector("a[href*='/anime/20/Naruto']")).Count > 0;
+
+            // Assert that "Naruto" is present in the search results
+            ClassicAssert.IsTrue(isNarutoPresent, "\"Naruto\" is not present in the search results.");
+
+
+        }
+
+
     }
 
 }
