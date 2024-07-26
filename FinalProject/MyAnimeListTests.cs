@@ -458,6 +458,22 @@ namespace MyAnimeListTests
 
         }
 
+        [Test]
+        public void AS05TopMangaBrowsing_NA_TopMangaTableDisplayed()
+        {
+            // Navigate to the top manga page
+            driver.Navigate().GoToUrl("https://myanimelist.net/topmanga.php");
+
+            // Wait until the page is fully loaded
+            wait.Until(driver => ((IJavaScriptExecutor)driver).ExecuteScript("return document.readyState").Equals("complete"));
+
+            // Verify the presence of the top anime table or relevant data
+            bool isTopAnimeTablePresent = driver.FindElements(By.CssSelector("tr.ranking-list")).Count > 0;
+
+            // Assert that the top manga table or relevant data is present on the page
+            ClassicAssert.IsTrue(isTopAnimeTablePresent, "The top manga table or relevant data is not present on the page.");
+
+        }
     }
 
 }
