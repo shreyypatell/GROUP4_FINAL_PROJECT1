@@ -441,6 +441,23 @@ namespace MyAnimeListTests
 
         }
 
+        [Test]
+        public void AS04TopAnimeBrowsing_NA_TopAnimeTableDisplayed()
+        {
+            // Navigate to the top anime page
+            driver.Navigate().GoToUrl("https://myanimelist.net/topanime.php");
+
+            // Wait until the page is fully loaded
+            wait.Until(driver => ((IJavaScriptExecutor)driver).ExecuteScript("return document.readyState").Equals("complete"));
+
+            // Verify the presence of the top anime table or relevant data
+            bool isTopAnimeTablePresent = driver.FindElements(By.CssSelector("tr.ranking-list")).Count > 0;
+
+            // Assert that the top anime table or relevant data is present on the page
+            ClassicAssert.IsTrue(isTopAnimeTablePresent, "The top anime table or relevant data is not present on the page.");
+
+        }
+
     }
 
 }
