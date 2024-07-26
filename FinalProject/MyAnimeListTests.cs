@@ -280,6 +280,31 @@ namespace MyAnimeListTests
             ClassicAssert.AreEqual("https://myanimelist.net/password.php?username=1", driver.Url);
         }
 
+        [Test]
+        public void UA06Logout_LoggedInUser_SuccessfulLogout()
+        {
+            Login();
+
+            // Find and click the profile dropdown
+            IWebElement profileDropdown = wait.Until(ExpectedConditions.ElementIsVisible(By.XPath("//*[@id=\"header-menu\"]/div[8]/a")));
+
+            // Ensure no other elements are obstructing the clickable element
+            wait.Until(ExpectedConditions.ElementToBeClickable(profileDropdown));
+
+            // Click the profile dropdown
+            profileDropdown.Click();
+
+
+            // Wait for the logout button to be clickable and click it
+            IWebElement logoutButton = wait.Until(ExpectedConditions.ElementToBeClickable(By.CssSelector("form[action='https://myanimelist.net/logout.php'] a")));
+            logoutButton.Click();
+
+            // Wait for redirection to the home page after logout
+            wait.Until(driver => driver.Url.Equals("https://myanimelist.net/"));
+
+            // Assert that the URL is the home page
+            ClassicAssert.AreEqual("https://myanimelist.net/", driver.Url);
+        }
     }
 
 }
