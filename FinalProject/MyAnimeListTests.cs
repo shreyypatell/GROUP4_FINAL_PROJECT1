@@ -305,6 +305,35 @@ namespace MyAnimeListTests
             // Assert that the URL is the home page
             ClassicAssert.AreEqual("https://myanimelist.net/", driver.Url);
         }
+
+        // Anime/Manga Searching and Browsing
+
+        [Test]
+        public void AS01BasicSearchFunctionality_SearchTerm_SearchResultsDisplayed()
+        {
+            // Navigate to the MyAnimeList homepage
+            driver.Navigate().GoToUrl("https://myanimelist.net/");
+
+            // Wait until the search bar is fully loaded
+            wait.Until(driver => driver.FindElement(By.Id("topSearchText")).Displayed);
+
+            // Enter the search term "Naruto"
+            IWebElement searchTextBox = driver.FindElement(By.Id("topSearchText"));
+            searchTextBox.SendKeys("Naruto");
+
+            // Submit the search form
+            IWebElement searchButton = driver.FindElement(By.Id("topSearchButon"));
+            searchButton.Click();
+
+            // Wait until the search results page is loaded
+            wait.Until(driver => ((IJavaScriptExecutor)driver).ExecuteScript("return document.readyState").Equals("complete"));
+
+            // Verify the search results header contains "Search Results for \"Naruto\""
+            IWebElement searchResultsHeader = wait.Until(driver => driver.FindElement(By.CssSelector("div.result-header.mb12")));
+            StringAssert.Contains("Search Results for \"Naruto\"", searchResultsHeader.Text, "The search results header does not contain 'Naruto'.");
+
+        }
+
     }
 
 }
