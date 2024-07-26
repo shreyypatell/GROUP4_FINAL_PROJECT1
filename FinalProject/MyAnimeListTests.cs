@@ -389,6 +389,57 @@ namespace MyAnimeListTests
 
         }
 
+        [Test]
+        public void AS03MangaAdvancedSearchWithFilters_ValidFilters_FilteredResultsDisplayed()
+        {
+            // Navigate to the manga search page
+            driver.Navigate().GoToUrl("https://myanimelist.net/manga.php");
+
+            // Wait for the page to fully load
+            wait.Until(driver => ((IJavaScriptExecutor)driver).ExecuteScript("return document.readyState").Equals("complete"));
+
+            // Perform a basic search
+            IWebElement searchBox = driver.FindElement(By.Id("q"));
+            searchBox.SendKeys("Naruto");
+
+            // Click on the Advanced Search link
+            IWebElement advancedSearchLink = driver.FindElement(By.CssSelector("a[data-ga-click-type='list-add-manga-advanced-window']"));
+
+            // Scroll the advanced search link into view
+            ((IJavaScriptExecutor)driver).ExecuteScript("arguments[0].scrollIntoView(true);", advancedSearchLink);
+
+            // Ensure no other elements are obstructing the clickable element
+            wait.Until(ExpectedConditions.ElementToBeClickable(advancedSearchLink));
+
+            // Click the advanced search 
+            ((IJavaScriptExecutor)driver).ExecuteScript("arguments[0].click();", advancedSearchLink);
+
+            // Apply filters 
+            SelectElement typeFilter = new SelectElement(driver.FindElement(By.Id("filterByType")));
+            typeFilter.SelectByValue("0"); // Manga
+
+            SelectElement scoreFilter = new SelectElement(driver.FindElement(By.Id("score")));
+            scoreFilter.SelectByValue("8"); // Very Good
+
+            SelectElement statusFilter = new SelectElement(driver.FindElement(By.Id("status")));
+            statusFilter.SelectByValue("2"); // Finished 
+
+            // Click the search button
+            IWebElement searchButton = driver.FindElement(By.CssSelector("input[data-ga-click-type='list-add-manga-advanced-search']"));
+            ((IJavaScriptExecutor)driver).ExecuteScript("arguments[0].scrollIntoView(true);", searchButton);
+            searchButton.Click();
+
+            // Wait for the search results to load
+            wait.Until(driver => ((IJavaScriptExecutor)driver).ExecuteScript("return document.readyState").Equals("complete"));
+
+            // Verify the search results contain "Naruto"
+            bool isNarutoPresent = driver.FindElements(By.CssSelector("a[href*='/manga/11/Naruto']")).Count > 0;
+
+            // Assert that "Naruto" is present in the search results
+            ClassicAssert.IsTrue(isNarutoPresent, "\"Naruto\" is not present in the search results.");
+
+
+        }
 
     }
 
