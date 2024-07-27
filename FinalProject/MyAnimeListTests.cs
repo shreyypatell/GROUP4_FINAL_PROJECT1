@@ -577,6 +577,33 @@ namespace MyAnimeListTests
             ClassicAssert.AreEqual("Reading", selectedOption, "The 'Reading' option is not selected.");
 
         }
+
+        [Test]
+        public void LM03UpdatingAnimeStatus_Completed_StatusUpdated()
+        {
+            Login();
+
+            // Navigate to a specific anime page
+            driver.Navigate().GoToUrl("https://myanimelist.net/anime/20");
+
+            // Wait until the page is fully loaded
+            wait.Until(driver => ((IJavaScriptExecutor)driver).ExecuteScript("return document.readyState").Equals("complete"));
+
+            // Wait for the dropdown element to be present
+            IWebElement dropdownElement = wait.Until(ExpectedConditions.ElementExists(By.Id("myinfo_status")));
+
+            // Create a SelectElement instance
+            SelectElement selectElement = new SelectElement(dropdownElement);
+
+            // Select the "Completed" option
+            selectElement.SelectByValue("2");
+
+            // Verify the selection
+            string selectedOption = selectElement.SelectedOption.Text;
+
+            // Assert that the correct option is selected
+            ClassicAssert.AreEqual("Completed", selectedOption, "The 'Completed' option is not selected.");
+        }
     }
 
 }
