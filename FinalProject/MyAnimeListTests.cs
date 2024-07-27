@@ -491,6 +491,35 @@ namespace MyAnimeListTests
             ClassicAssert.IsTrue(isSeasonalAnimeListPresent, "Seasonal anime list is not present on the page.");
 
         }
+
+        [Test]
+        public void AS07DetailedInformation_SpecificAnimePage_AnimeDetailsDisplayed()
+        {
+            // Navigate to a specific anime page
+            driver.Navigate().GoToUrl("https://myanimelist.net/anime/20/Naruto");
+
+            // Wait until the page is fully loaded
+            wait.Until(driver => ((IJavaScriptExecutor)driver).ExecuteScript("return document.readyState").Equals("complete"));
+
+            // Verify the presence of the anime title
+            bool isTitlePresent = driver.FindElements(By.XPath("//div[@itemprop='name']/h1[@class='title-name h1_bold_none']/strong[text()='Naruto']")).Count > 0;
+
+            // Verify the presence of the anime type
+            bool isTypePresent = driver.FindElements(By.XPath("//div[@class='spaceit_pad']/span[@class='dark_text' and text()='Type:']")).Count > 0;
+
+            // Verify the presence of the number of episodes
+            bool isEpisodesPresent = driver.FindElements(By.XPath("//div[@class='spaceit_pad']/span[@class='dark_text' and text()='Episodes:']")).Count > 0;
+
+            // Verify the presence of the genres
+            bool areGenresPresent = driver.FindElements(By.XPath("//div[@class='spaceit_pad']/span[@class='dark_text' and text()='Genres:']")).Count > 0;
+
+            // Assert that the title, type, episodes, and genres are present
+            ClassicAssert.IsTrue(isTitlePresent, "The anime title is not present on the page.");
+            ClassicAssert.IsTrue(isTypePresent, "The anime type is not present on the page.");
+            ClassicAssert.IsTrue(isEpisodesPresent, "The number of episodes is not present on the page.");
+            ClassicAssert.IsTrue(areGenresPresent, "The genres are not present on the page.");
+
+        }
     }
 
 }
