@@ -474,6 +474,23 @@ namespace MyAnimeListTests
             ClassicAssert.IsTrue(isTopAnimeTablePresent, "The top manga table or relevant data is not present on the page.");
 
         }
+
+        [Test]
+        public void AS06SeasonalAnimeBrowsing_NA_SeasonalAnimeListDisplayed()
+        {
+            // Navigate to the seasonal anime page
+            driver.Navigate().GoToUrl("https://myanimelist.net/anime/season");
+
+            // Wait until the page is fully loaded
+            wait.Until(driver => ((IJavaScriptExecutor)driver).ExecuteScript("return document.readyState").Equals("complete"));
+
+            // Verify the presence of the seasonal anime cards
+            bool isSeasonalAnimeListPresent = driver.FindElements(By.CssSelector(".js-anime-category-producer.seasonal-anime")).Count > 0;
+
+            // Assert that the seasonal anime list is present on the page
+            ClassicAssert.IsTrue(isSeasonalAnimeListPresent, "Seasonal anime list is not present on the page.");
+
+        }
     }
 
 }
