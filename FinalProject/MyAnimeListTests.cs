@@ -81,7 +81,7 @@ namespace MyAnimeListTests
                                  .ToList();
             return files.First();
         }
-        
+
         // User Registration and Authentication
         [Test]
         public async Task UA01UserRegistration_ValidInput_SuccessfulRegistration()
@@ -690,6 +690,43 @@ namespace MyAnimeListTests
 
             // Assert that the correct option is selected
             ClassicAssert.AreEqual("(8) Very Good", selectedOption, "The '(8) Very Good' option is not selected.");
+        }
+
+        [Test]
+        public void LM07ExportingAnimeList_AnimeList_FileDownloaded()
+        {
+            Login();
+
+            // Navigate to the export page
+            driver.Navigate().GoToUrl("https://myanimelist.net/panel.php?go=export");
+
+            // Wait until the page is fully loaded
+            wait.Until(driver => ((IJavaScriptExecutor)driver).ExecuteScript("return document.readyState").Equals("complete"));
+
+            // Select "anime list" from the dropdown
+            IWebElement dropdownElement = driver.FindElement(By.XPath("//*[@id=\"dialog\"]/tbody/tr/td/form/div/select"));
+            var selectElement = new SelectElement(dropdownElement);
+
+            // Select the "anime list" option
+            selectElement.SelectByValue("1");
+
+            // Submit the form
+            IWebElement submitButton = driver.FindElement(By.Name("subexport"));
+            submitButton.Click();
+
+            // Handle the confirmation alert
+            IAlert alert = wait.Until(ExpectedConditions.AlertIsPresent());
+            alert.Accept();
+
+            // Wait for the download to complete
+            Thread.Sleep(5000);
+
+            // Assert that the most recent XML file has been downloaded
+            string recentFile = GetMostRecentFile(downloadPath);
+
+            ClassicAssert.IsNotNull(recentFile, "No file was downloaded.");
+            ClassicAssert.IsTrue(recentFile.Contains("animelist_"), $"The downloaded file '{recentFile}' does not start with 'animelist_'.");
+
         }
     }
 
