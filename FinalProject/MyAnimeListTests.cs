@@ -74,6 +74,14 @@ namespace MyAnimeListTests
 
         }
 
+        private string GetMostRecentFile(string directoryPath)
+        {
+            var files = Directory.GetFiles(directoryPath)
+                                 .OrderByDescending(f => new FileInfo(f).LastWriteTime)
+                                 .ToList();
+            return files.First();
+        }
+        
         // User Registration and Authentication
         [Test]
         public async Task UA01UserRegistration_ValidInput_SuccessfulRegistration()
