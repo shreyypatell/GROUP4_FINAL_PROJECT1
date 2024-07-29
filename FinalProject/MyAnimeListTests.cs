@@ -294,6 +294,39 @@ namespace MyAnimeListTests
             string displayedBio = bioElement.Text.Trim();
             ClassicAssert.AreEqual("New Bio", displayedBio, "Profile information was not updated successfully.");
         }
+
+        [Test]
+        public void PM02UpdateCommentSettings_DisallowComments_Successful()
+        {
+            Login();
+
+            // Navigate to the profile settings page
+            driver.Navigate().GoToUrl("https://myanimelist.net/editprofile.php");
+
+            // Wait until the page is fully loaded
+            wait.Until(driver => ((IJavaScriptExecutor)driver).ExecuteScript("return document.readyState").Equals("complete"));
+
+            // Locate the comment settings dropdown
+            IWebElement commentSettingsDropdown = driver.FindElement(By.Name("mem_comments"));
+
+            // Create a SelectElement instance to interact with the dropdown
+            var selectElement = new SelectElement(commentSettingsDropdown);
+
+            // Select an option, "Disallow Comments"
+            selectElement.SelectByValue("0");
+
+            // Locate and click the submit button
+            IWebElement submitButton = driver.FindElement(By.Name("submit"));
+            submitButton.Click();
+
+            // Wait for success message
+            wait.Until(driver => driver.FindElement(By.CssSelector("div.goodresult")).Displayed &&
+                                 driver.FindElement(By.CssSelector("div.goodresult")).Text.Contains("Successfully updated your profile."));
+
+            // Assert success message
+            ClassicAssert.IsTrue(driver.FindElement(By.CssSelector("div.goodresult")).Displayed);
+            ClassicAssert.IsTrue(driver.FindElement(By.CssSelector("div.goodresult")).Text.Contains("Successfully updated your profile."));
+        }
     }
 
 }
