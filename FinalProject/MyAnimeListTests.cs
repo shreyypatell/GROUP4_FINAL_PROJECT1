@@ -254,6 +254,46 @@ namespace MyAnimeListTests
             ClassicAssert.AreEqual("https://myanimelist.net/password.php?username=1", driver.Url);
         }
 
+        [Test]
+        public void PM01UpdateProfileInformation_NewBio_Successful()
+        {
+            Login();
+
+            // Navigate to the profile settings page
+            driver.Navigate().GoToUrl("https://myanimelist.net/editprofile.php");
+
+            // Wait until the page is fully loaded
+            wait.Until(driver => ((IJavaScriptExecutor)driver).ExecuteScript("return document.readyState").Equals("complete"));
+
+            // Locate the "About Me" textarea and update its value
+            IWebElement aboutMeTextArea = driver.FindElement(By.Id("classic-about-me-textarea"));
+            string newBio = "New Bio"; // The new profile information to be entered
+            aboutMeTextArea.Clear(); // Clear any existing text
+            aboutMeTextArea.SendKeys(newBio); // Enter the new bio
+
+            // Locate the submit button and click it
+            IWebElement submitButton = driver.FindElement(By.Name("submit"));
+            submitButton.Click();
+
+            // Wait for the profile update confirmation
+            wait.Until(driver => driver.FindElement(By.CssSelector("div.goodresult")).Displayed &&
+                      driver.FindElement(By.CssSelector("div.goodresult")).Text.Contains("Successfully updated your profile."));
+
+
+            // Verify that the success message is displayed correctly
+            string successMessage = driver.FindElement(By.CssSelector("div.goodresult")).Text;
+            ClassicAssert.IsTrue(successMessage.Contains("Successfully updated your profile."), "Success message is not displayed or is incorrect.");
+
+            // Navigate to the profile page to verify the updated bio
+            driver.Navigate().GoToUrl("https://myanimelist.net/profile/" + testUserName); // Replace with actual profile URL
+
+            // Locate the updated bio on the profile page using the provided XPath
+            IWebElement bioElement = driver.FindElement(By.XPath("/html/body/div[1]/div[2]/div[3]/div[2]/div/div[2]/div[1]/div/table/tbody/tr/td/div"));
+
+            // Verify the updated bio
+            string displayedBio = bioElement.Text.Trim();
+            ClassicAssert.AreEqual("New Bio", displayedBio, "Profile information was not updated successfully.");
+        }
     }
 
 }
