@@ -351,6 +351,36 @@ namespace MyAnimeListTests
             ClassicAssert.IsTrue(driver.FindElement(By.CssSelector("div.goodresult")).Displayed);
             ClassicAssert.IsTrue(driver.FindElement(By.CssSelector("div.goodresult")).Text.Contains("Successfully updated your profile."));
         }
+
+        [Test]
+        public void PM04UpdateBirthday_BirthDay_Successful()
+        {
+            Login();
+
+            // Navigate to profile settings
+            driver.Navigate().GoToUrl("https://myanimelist.net/editprofile.php");
+
+            // Select birthday dropdowns
+            var monthDropdown = new SelectElement(driver.FindElement(By.Name("bmonth")));
+            monthDropdown.SelectByText("Dec");
+
+            var dayDropdown = new SelectElement(driver.FindElement(By.Name("bday")));
+            dayDropdown.SelectByText("25");
+
+            var yearDropdown = new SelectElement(driver.FindElement(By.Name("byear")));
+            yearDropdown.SelectByText("2000");
+
+            // Click submit button
+            driver.FindElement(By.Name("submit")).Click();
+
+            // Wait for success message
+            wait.Until(driver => driver.FindElement(By.CssSelector("div.goodresult")).Displayed &&
+                                 driver.FindElement(By.CssSelector("div.goodresult")).Text.Contains("Successfully updated your profile."));
+
+            // Assert success message
+            ClassicAssert.IsTrue(driver.FindElement(By.CssSelector("div.goodresult")).Displayed);
+            ClassicAssert.IsTrue(driver.FindElement(By.CssSelector("div.goodresult")).Text.Contains("Successfully updated your profile."));
+        }
     }
 
 }
