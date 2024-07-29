@@ -327,6 +327,30 @@ namespace MyAnimeListTests
             ClassicAssert.IsTrue(driver.FindElement(By.CssSelector("div.goodresult")).Displayed);
             ClassicAssert.IsTrue(driver.FindElement(By.CssSelector("div.goodresult")).Text.Contains("Successfully updated your profile."));
         }
+
+        [Test]
+        public void PM03UpdateGender_NonBinary_Successful()
+        {
+            Login();
+
+            // Navigate to profile settings
+            driver.Navigate().GoToUrl("https://myanimelist.net/editprofile.php");
+
+            // Select gender dropdown and update to 'Non-Binary'
+            var genderDropdown = new SelectElement(driver.FindElement(By.Name("gender")));
+            genderDropdown.SelectByText("Non-Binary");
+
+            // Click submit button
+            driver.FindElement(By.Name("submit")).Click();
+
+            // Wait for success message
+            wait.Until(driver => driver.FindElement(By.CssSelector("div.goodresult")).Displayed &&
+                                 driver.FindElement(By.CssSelector("div.goodresult")).Text.Contains("Successfully updated your profile."));
+
+            // Assert success message
+            ClassicAssert.IsTrue(driver.FindElement(By.CssSelector("div.goodresult")).Displayed);
+            ClassicAssert.IsTrue(driver.FindElement(By.CssSelector("div.goodresult")).Text.Contains("Successfully updated your profile."));
+        }
     }
 
 }
