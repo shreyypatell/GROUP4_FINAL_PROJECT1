@@ -381,6 +381,31 @@ namespace MyAnimeListTests
             ClassicAssert.IsTrue(driver.FindElement(By.CssSelector("div.goodresult")).Displayed);
             ClassicAssert.IsTrue(driver.FindElement(By.CssSelector("div.goodresult")).Text.Contains("Successfully updated your profile."));
         }
+
+        [Test]
+        public void PM05UpdateLocation_NewYorkNY_Successful()
+        {
+            Login();
+
+            // Navigate to profile settings
+            driver.Navigate().GoToUrl("https://myanimelist.net/editprofile.php");
+
+            // Input new location
+            IWebElement locationInput = driver.FindElement(By.Name("location"));
+            locationInput.Clear();
+            locationInput.SendKeys("New York, NY");
+
+            // Click submit button
+            driver.FindElement(By.Name("submit")).Click();
+
+            // Wait for success message
+            wait.Until(driver => driver.FindElement(By.CssSelector("div.goodresult")).Displayed &&
+                                 driver.FindElement(By.CssSelector("div.goodresult")).Text.Contains("Successfully updated your profile."));
+
+            // Assert success message
+            ClassicAssert.IsTrue(driver.FindElement(By.CssSelector("div.goodresult")).Displayed);
+            ClassicAssert.IsTrue(driver.FindElement(By.CssSelector("div.goodresult")).Text.Contains("Successfully updated your profile."));
+        }
     }
 
 }
