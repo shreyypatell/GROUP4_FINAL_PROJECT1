@@ -431,6 +431,31 @@ namespace MyAnimeListTests
             ClassicAssert.IsTrue(driver.FindElement(By.CssSelector("div.goodresult")).Displayed);
             ClassicAssert.IsTrue(driver.FindElement(By.CssSelector("div.goodresult")).Text.Contains("Successfully updated your profile."));
         }
+
+        [Test]
+        public void PM07UpdateAboutMeStyle_AboutMeOption_Successful()
+        {
+            Login();
+
+            // Navigate to profile settings
+            driver.Navigate().GoToUrl("https://myanimelist.net/editprofile.php");
+
+            // Select "Modern" for About Me Style
+            var modernRadioButton = driver.FindElement(By.Id("about_me_setting_1"));
+            modernRadioButton.Click();
+
+            // Click submit button
+            driver.FindElement(By.Name("submit")).Click();
+
+            // Wait for success message
+            wait.Until(driver => driver.FindElement(By.CssSelector("div.goodresult")).Displayed &&
+                                 driver.FindElement(By.CssSelector("div.goodresult")).Text.Contains("Successfully updated your profile."));
+
+            // Assert success message
+            ClassicAssert.IsTrue(driver.FindElement(By.CssSelector("div.goodresult"))
+                .Displayed);
+            ClassicAssert.IsTrue(driver.FindElement(By.CssSelector("div.goodresult")).Text.Contains("Successfully updated your profile."));
+        }
     }
 
 }
