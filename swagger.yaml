@@ -1,0 +1,616 @@
+openapi: 3.0.3
+info:
+  title: Group 4 Final Project
+  version: 1.0.0
+  contact: {}
+servers:
+  - url: https://jsonplaceholder.typicode.com
+paths:
+  /posts:
+    get:
+      summary: Get All posts
+      description: Get All posts
+      operationId: getAllPosts
+      tags:
+        - Posts
+      responses:
+        '200':
+          description: ''
+    post:
+      summary: Create Post
+      description: Create Post
+      operationId: createPost
+      tags:
+        - Posts
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                body:
+                  type: string
+                  example: Content in the new post is very good.
+                title:
+                  type: string
+                  example: New Post
+                userId:
+                  type: number
+                  example: 1
+            examples:
+              Create Post:
+                value:
+                  body: Content in the new post is very good.
+                  title: New Post
+                  userId: 1
+      responses:
+        '200':
+          description: ''
+  /posts/{id}:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+    get:
+      summary: Get Post by ID
+      description: Get Post by ID
+      operationId: getPostById
+      tags:
+        - Posts
+      responses:
+        '200':
+          description: ''
+    put:
+      summary: Update Post
+      description: Update Post
+      operationId: updatePost
+      tags:
+        - Posts
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                body:
+                  type: string
+                  example: Content in the post is very good.
+                id:
+                  type: number
+                  example: 100
+                title:
+                  type: string
+                  example: Updated Post
+                userId:
+                  type: number
+                  example: 1
+            examples:
+              Update Post:
+                value:
+                  body: Content in the post is very good.
+                  id: 100
+                  title: Updated Post
+                  userId: 1
+      responses:
+        '200':
+          description: ''
+    delete:
+      summary: Delete Post
+      description: Delete Post
+      operationId: deletePost
+      tags:
+        - Posts
+      responses:
+        '200':
+          description: ''
+  /comments:
+    get:
+      summary: Get All Comments
+      description: Get All Comments
+      operationId: getAllComments
+      tags:
+        - Comments
+      responses:
+        '200':
+          description: ''
+    post:
+      summary: Create Comment
+      description: Create Comment
+      operationId: createComment
+      tags:
+        - Comments
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                body:
+                  type: string
+                  example: Very good post
+                email:
+                  type: string
+                  example: shreyypatell@gmail.com
+                name:
+                  type: string
+                  example: shrey
+                postId:
+                  type: number
+                  example: 8
+            examples:
+              Create Comment:
+                value:
+                  body: Very good post
+                  email: shreyypatell@gmail.com
+                  name: shrey
+                  postId: 8
+      responses:
+        '200':
+          description: ''
+  /comments/{id}:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+    get:
+      summary: Get Comment by ID
+      description: Get Comment by ID
+      operationId: getCommentById
+      tags:
+        - Comments
+      responses:
+        '200':
+          description: ''
+    put:
+      summary: Update Comment
+      description: Update Comment
+      operationId: updateComment
+      tags:
+        - Comments
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                body:
+                  type: string
+                  example: Very good post
+                email:
+                  type: string
+                  example: shreyypatell@gmail.com
+                id:
+                  type: number
+                  example: 7
+                name:
+                  type: string
+                  example: shrey
+                postId:
+                  type: number
+                  example: 8
+            examples:
+              Update Comment:
+                value:
+                  body: Very good post
+                  email: shreyypatell@gmail.com
+                  id: 7
+                  name: shrey
+                  postId: 8
+      responses:
+        '200':
+          description: ''
+    delete:
+      summary: Delete Comment
+      description: Delete Comment
+      operationId: deleteComment
+      tags:
+        - Comments
+      responses:
+        '200':
+          description: ''
+  /albums:
+    get:
+      summary: Get All Albums
+      description: Get All Albums
+      operationId: getAllAlbums
+      tags:
+        - Albums
+      responses:
+        '200':
+          description: ''
+    post:
+      summary: Create Album
+      description: Create Album
+      operationId: createAlbum
+      tags:
+        - Albums
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                title:
+                  type: string
+                  example: Awesome Album
+                userId:
+                  type: number
+                  example: 7
+            examples:
+              Create Album:
+                value:
+                  title: Awesome Album
+                  userId: 7
+      responses:
+        '200':
+          description: ''
+  /albums/{id}:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+    get:
+      summary: Get Album by ID
+      description: Get Album by ID
+      operationId: getAlbumById
+      tags:
+        - Albums
+      responses:
+        '200':
+          description: ''
+    put:
+      summary: Update Album
+      description: Update Album
+      operationId: updateAlbum
+      tags:
+        - Albums
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                id:
+                  type: number
+                  example: 9
+                title:
+                  type: string
+                  example: New title
+                userId:
+                  type: number
+                  example: 1
+            examples:
+              Update Album:
+                value:
+                  id: 9
+                  title: New title
+                  userId: 1
+      responses:
+        '200':
+          description: ''
+    delete:
+      summary: Delete Album
+      description: Delete Album
+      operationId: deleteAlbum
+      tags:
+        - Albums
+      responses:
+        '200':
+          description: ''
+  /photos:
+    get:
+      summary: Get All Photos
+      description: Get All Photos
+      operationId: getAllPhotos
+      tags:
+        - Photos
+      responses:
+        '200':
+          description: ''
+    post:
+      summary: Create Photo
+      description: Create Photo
+      operationId: createPhoto
+      tags:
+        - Photos
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                albumId:
+                  type: number
+                  example: 8
+                thumbnailUrl:
+                  type: string
+                  example: https://via.placeholder.com/150/92c952
+                title:
+                  type: string
+                  example: New Photo
+                url:
+                  type: string
+                  example: https://via.placeholder.com/600/92c952
+            examples:
+              Create Photo:
+                value:
+                  albumId: 8
+                  thumbnailUrl: https://via.placeholder.com/150/92c952
+                  title: New Photo
+                  url: https://via.placeholder.com/600/92c952
+      responses:
+        '200':
+          description: ''
+  /photos/{id}:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+    get:
+      summary: Get Photo by ID
+      description: Get Photo by ID
+      operationId: getPhotoById
+      tags:
+        - Photos
+      responses:
+        '200':
+          description: ''
+    put:
+      summary: Update Photo
+      description: Update Photo
+      operationId: updatePhoto
+      tags:
+        - Photos
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                albumId:
+                  type: number
+                  example: 1
+                id:
+                  type: number
+                  example: 1
+                thumbnailUrl:
+                  type: string
+                  example: https://via.placeholder.com/150/92c952
+                title:
+                  type: string
+                  example: Update title
+                url:
+                  type: string
+                  example: https://via.placeholder.com/600/92c952
+            examples:
+              Update Photo:
+                value:
+                  albumId: 1
+                  id: 1
+                  thumbnailUrl: https://via.placeholder.com/150/92c952
+                  title: Update title
+                  url: https://via.placeholder.com/600/92c952
+      responses:
+        '200':
+          description: ''
+    delete:
+      summary: Delete Photo
+      description: Delete Photo
+      operationId: deletePhoto
+      tags:
+        - Photos
+      responses:
+        '200':
+          description: ''
+  /todos:
+    get:
+      summary: Get All Todos
+      description: Get All Todos
+      operationId: getAllTodos
+      tags:
+        - Todos
+      responses:
+        '200':
+          description: ''
+    post:
+      summary: Create Todo
+      description: Create Todo
+      operationId: createTodo
+      tags:
+        - Todos
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                completed:
+                  type: boolean
+                  example: false
+                title:
+                  type: string
+                  example: New Todo
+                userId:
+                  type: number
+                  example: 1
+            examples:
+              Create Todo:
+                value:
+                  completed: false
+                  title: New Todo
+                  userId: 1
+      responses:
+        '200':
+          description: ''
+  /todos/{id}:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+    get:
+      summary: Get Todo by ID
+      description: Get Todo by ID
+      operationId: getTodoById
+      tags:
+        - Todos
+      responses:
+        '200':
+          description: ''
+    put:
+      summary: Update Todo
+      description: Update Todo
+      operationId: updateTodo
+      tags:
+        - Todos
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                completed:
+                  type: boolean
+                  example: true
+                id:
+                  type: number
+                  example: 1
+                title:
+                  type: string
+                  example: Updated Todo
+                userId:
+                  type: number
+                  example: 1
+            examples:
+              Update Todo:
+                value:
+                  completed: true
+                  id: 1
+                  title: Updated Todo
+                  userId: 1
+      responses:
+        '200':
+          description: ''
+    delete:
+      summary: Delete Todo
+      description: Delete Todo
+      operationId: deleteTodo
+      tags:
+        - Todos
+      responses:
+        '200':
+          description: ''
+  /users:
+    get:
+      summary: Get All Users
+      description: Get All Users
+      operationId: getAllUsers
+      tags:
+        - Users
+      responses:
+        '200':
+          description: ''
+    post:
+      summary: Create User
+      description: Create User
+      operationId: createUser
+      tags:
+        - Users
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  example: shreyypatell@gmail.com
+                name:
+                  type: string
+                  example: Shrey Patel
+                username:
+                  type: string
+                  example: shrey
+            examples:
+              Create User:
+                value:
+                  email: shreyypatell@gmail.com
+                  name: Shrey Patel
+                  username: shrey
+      responses:
+        '200':
+          description: ''
+  /users/{id}:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+    get:
+      summary: Get User by ID
+      description: Get User by ID
+      operationId: getUserById
+      tags:
+        - Users
+      responses:
+        '200':
+          description: ''
+    put:
+      summary: Update User
+      description: Update User
+      operationId: updateUser
+      tags:
+        - Users
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  example: shreyypatell@gmail.com
+                id:
+                  type: number
+                  example: 1
+                name:
+                  type: string
+                  example: Shrey Patel
+                username:
+                  type: string
+                  example: shrey
+            examples:
+              Update User:
+                value:
+                  email: shreyypatell@gmail.com
+                  id: 1
+                  name: Shrey Patel
+                  username: shrey
+      responses:
+        '200':
+          description: ''
+    delete:
+      summary: Delete User
+      description: Delete User
+      operationId: deleteUser
+      tags:
+        - Users
+      responses:
+        '200':
+          description: ''
