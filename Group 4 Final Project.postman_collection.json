@@ -1,0 +1,1897 @@
+{
+	"info": {
+		"_postman_id": "4a9dbf50-49da-4175-9e50-e1d59e530865",
+		"name": "Group 4 Final Project",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "23175561"
+	},
+	"item": [
+		{
+			"name": "Get All posts",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Response status code is 200\", function () {\r",
+							"  pm.expect(pm.response.code).to.equal(200);\r",
+							"});\r",
+							"\r",
+							"\r",
+							"pm.test(\"Response time is less than 500ms\", function () {\r",
+							"  pm.expect(pm.response.responseTime).to.be.below(500);\r",
+							"});\r",
+							"\r",
+							"\r",
+							"pm.test(\"Response has the required fields\", function () {\r",
+							"    const response = pm.response.json();\r",
+							"    \r",
+							"    pm.expect(response).to.be.an('array');\r",
+							"    response.forEach(function(post) {\r",
+							"        pm.expect(post).to.have.property('userId');\r",
+							"        pm.expect(post).to.have.property('id');\r",
+							"        pm.expect(post).to.have.property('title');\r",
+							"        pm.expect(post).to.have.property('body');\r",
+							"    });\r",
+							"});\r",
+							"\r",
+							"\r",
+							"pm.test(\"UserId and id should be integers\", function () {\r",
+							"    const responseData = pm.response.json();\r",
+							"    \r",
+							"    responseData.forEach(function(post) {\r",
+							"        pm.expect(post.userId).to.be.a('number');\r",
+							"        pm.expect(post.id).to.be.a('number');\r",
+							"    });\r",
+							"});\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://jsonplaceholder.typicode.com/posts",
+					"protocol": "https",
+					"host": [
+						"jsonplaceholder",
+						"typicode",
+						"com"
+					],
+					"path": [
+						"posts"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Post by ID",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Response status code is 200\", function () {\r",
+							"  pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"\r",
+							"pm.test(\"Response time is less than 500ms\", function () {\r",
+							"  pm.expect(pm.response.responseTime).to.be.below(500);\r",
+							"});\r",
+							"\r",
+							"\r",
+							"pm.test(\"Response has the required fields\", function () {\r",
+							"    const response = pm.response.json();\r",
+							" \r",
+							"    pm.expect(response).to.have.property('userId');\r",
+							"    pm.expect(response).to.have.property('id');\r",
+							"    pm.expect(response).to.have.property('title');\r",
+							"    pm.expect(response).to.have.property('body'); \r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response has correct ID\", function () {\r",
+							"  const response = pm.response.json();\r",
+							"  pm.expect(response.id).to.eql(8);\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://jsonplaceholder.typicode.com/posts/8",
+					"protocol": "https",
+					"host": [
+						"jsonplaceholder",
+						"typicode",
+						"com"
+					],
+					"path": [
+						"posts",
+						"8"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create Post",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Response status code is 201\", function () {\r",
+							"  pm.response.to.have.status(201);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response time is less than 500ms\", function () {\r",
+							"  pm.expect(pm.response.responseTime).to.be.below(500);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response has the required fields\", function () {\r",
+							"  const response = pm.response.json();\r",
+							"\r",
+							"  pm.expect(response).to.have.property('userId');\r",
+							"  pm.expect(response).to.have.property('id');\r",
+							"  pm.expect(response).to.have.property('title');\r",
+							"  pm.expect(response).to.have.property('body'); \r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response has correct title\", function () {\r",
+							"  const response = pm.response.json();\r",
+							"  pm.expect(response.title).to.eql(\"New Post\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response has correct body\", function () {\r",
+							"  const response = pm.response.json();\r",
+							"  pm.expect(response.body).to.eql(\"Content in the new post is very good.\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response has correct userId\", function () {\r",
+							"  const response = pm.response.json();\r",
+							"  pm.expect(response.userId).to.eql(1);\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"title\": \"New Post\",\r\n  \"body\": \"Content in the new post is very good.\",\r\n  \"userId\": 1\r\n}\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://jsonplaceholder.typicode.com/posts",
+					"protocol": "https",
+					"host": [
+						"jsonplaceholder",
+						"typicode",
+						"com"
+					],
+					"path": [
+						"posts"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update Post",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Response status code is 200\", function () {\r",
+							"  pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response time is less than 500ms\", function () {\r",
+							"  pm.expect(pm.response.responseTime).to.be.below(500);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response has the required fields\", function () {\r",
+							"  const response = pm.response.json();\r",
+							"\r",
+							"  pm.expect(response).to.have.property('id');\r",
+							"  pm.expect(response).to.have.property('title');\r",
+							"  pm.expect(response).to.have.property('body');\r",
+							"  pm.expect(response).to.have.property('userId'); \r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response has correct title\", function () {\r",
+							"  const response = pm.response.json();\r",
+							"  pm.expect(response.title).to.eql(\"Updated Post\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response has correct body\", function () {\r",
+							"  const response = pm.response.json();\r",
+							"  pm.expect(response.body).to.eql(\"Content in the post is very good.\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response has correct userId\", function () {\r",
+							"  const response = pm.response.json();\r",
+							"  pm.expect(response.userId).to.eql(1);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response has correct ID\", function () {\r",
+							"  const response = pm.response.json();\r",
+							"  pm.expect(response.id).to.eql(100);\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"id\": 100,\r\n    \"title\": \"Updated Post\",\r\n    \"body\": \"Content in the post is very good.\",\r\n    \"userId\": 1\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://jsonplaceholder.typicode.com/posts/100",
+					"protocol": "https",
+					"host": [
+						"jsonplaceholder",
+						"typicode",
+						"com"
+					],
+					"path": [
+						"posts",
+						"100"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete Post",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Response status code is 200\", function () {\r",
+							"  pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response time is less than 500ms\", function () {\r",
+							"  pm.expect(pm.response.responseTime).to.be.below(500);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response body is empty\", function () {\r",
+							"  const response = pm.response.json();\r",
+							"  pm.expect(response).to.be.empty;\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "https://jsonplaceholder.typicode.com/posts/100",
+					"protocol": "https",
+					"host": [
+						"jsonplaceholder",
+						"typicode",
+						"com"
+					],
+					"path": [
+						"posts",
+						"100"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get All Comments",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Response status code is 200\", function () {\r",
+							"  pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response time is less than 500ms\", function () {\r",
+							"  pm.expect(pm.response.responseTime).to.be.below(500);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response is an array\", function () {\r",
+							"  const response = pm.response.json();\r",
+							"  pm.expect(response).to.be.an('array');\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Each comment has the required fields\", function () {\r",
+							"  const response = pm.response.json();\r",
+							"  response.forEach(comment => {\r",
+							"    pm.expect(comment).to.have.property('postId');\r",
+							"    pm.expect(comment).to.have.property('id');\r",
+							"    pm.expect(comment).to.have.property('name');\r",
+							"    pm.expect(comment).to.have.property('email');\r",
+							"    pm.expect(comment).to.have.property('body');\r",
+							"  });\r",
+							"});\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://jsonplaceholder.typicode.com/comments",
+					"protocol": "https",
+					"host": [
+						"jsonplaceholder",
+						"typicode",
+						"com"
+					],
+					"path": [
+						"comments"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Comment by ID",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Response status code is 200\", function () {\r",
+							"  pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response time is less than 500ms\", function () {\r",
+							"  pm.expect(pm.response.responseTime).to.be.below(500);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response has the required fields\", function () {\r",
+							"  const response = pm.response.json();\r",
+							"  pm.expect(response).to.have.property('postId');\r",
+							"  pm.expect(response).to.have.property('id');\r",
+							"  pm.expect(response).to.have.property('name');\r",
+							"  pm.expect(response).to.have.property('email');\r",
+							"  pm.expect(response).to.have.property('body'); \r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response has correct ID\", function () {\r",
+							"  const response = pm.response.json();\r",
+							"  pm.expect(response.id).to.eql(7);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response has correct data for ID 7\", function () {\r",
+							"  const response = pm.response.json();\r",
+							"  \r",
+							"  pm.expect(response.postId).to.eql(2);\r",
+							"  pm.expect(response.name).to.eql(\"repellat consequatur praesentium vel minus molestias voluptatum\");\r",
+							"  pm.expect(response.email).to.eql(\"Dallas@ole.me\");\r",
+							"  pm.expect(response.body).to.eql(\"maiores sed dolores similique labore et inventore et\\nquasi temporibus esse sunt id et\\neos voluptatem aliquam\\naliquid ratione corporis molestiae mollitia quia et magnam dolor\");\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://jsonplaceholder.typicode.com/comments/7",
+					"protocol": "https",
+					"host": [
+						"jsonplaceholder",
+						"typicode",
+						"com"
+					],
+					"path": [
+						"comments",
+						"7"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create Comment",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Response status code is 201\", function () {\r",
+							"  pm.response.to.have.status(201);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response time is less than 500ms\", function () {\r",
+							"  pm.expect(pm.response.responseTime).to.be.below(500);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response has the required fields\", function () {\r",
+							"  const response = pm.response.json();\r",
+							"  pm.expect(response).to.have.property('id');\r",
+							"  pm.expect(response).to.have.property('name');\r",
+							"  pm.expect(response).to.have.property('body');\r",
+							"  pm.expect(response).to.have.property('email');\r",
+							"  pm.expect(response).to.have.property('postId'); \r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response has correct data\", function () {\r",
+							"  const response = pm.response.json();\r",
+							"  pm.expect(response.name).to.eql(\"shrey\");\r",
+							"  pm.expect(response.body).to.eql(\"Very good post\");\r",
+							"  pm.expect(response.email).to.eql(\"shreyypatell@gmail.com\");\r",
+							"  pm.expect(response.postId).to.eql(8);\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"name\": \"shrey\",\r\n    \"body\": \"Very good post\",\r\n    \"email\": \"shreyypatell@gmail.com\",\r\n    \"postId\": 8\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://jsonplaceholder.typicode.com/comments/",
+					"protocol": "https",
+					"host": [
+						"jsonplaceholder",
+						"typicode",
+						"com"
+					],
+					"path": [
+						"comments",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update Comment",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Response status code is 200\", function () {\r",
+							"  pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response time is less than 500ms\", function () {\r",
+							"  pm.expect(pm.response.responseTime).to.be.below(500);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response has the required fields\", function () {\r",
+							"  const response = pm.response.json();\r",
+							"  pm.expect(response).to.have.property('id');\r",
+							"  pm.expect(response).to.have.property('name');\r",
+							"  pm.expect(response).to.have.property('body');\r",
+							"  pm.expect(response).to.have.property('email');\r",
+							"  pm.expect(response).to.have.property('postId'); \r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response has correct data\", function () {\r",
+							"  const response = pm.response.json();\r",
+							"  pm.expect(response.id).to.eql(7);\r",
+							"  pm.expect(response.name).to.eql(\"shrey\");\r",
+							"  pm.expect(response.body).to.eql(\"Very good post\");\r",
+							"  pm.expect(response.email).to.eql(\"shreyypatell@gmail.com\");\r",
+							"  pm.expect(response.postId).to.eql(8);\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"id\": 7,\r\n    \"name\": \"shrey\",\r\n    \"body\": \"Very good post\",\r\n    \"email\": \"shreyypatell@gmail.com\",\r\n    \"postId\": 8\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://jsonplaceholder.typicode.com/comments/7",
+					"protocol": "https",
+					"host": [
+						"jsonplaceholder",
+						"typicode",
+						"com"
+					],
+					"path": [
+						"comments",
+						"7"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete Comment",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Response status code is 200\", function () {\r",
+							"  pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response time is less than 500ms\", function () {\r",
+							"  pm.expect(pm.response.responseTime).to.be.below(500);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response body is empty\", function () {\r",
+							"  const response = pm.response.json();\r",
+							"  pm.expect(response).to.be.empty;\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "https://jsonplaceholder.typicode.com/comments/8",
+					"protocol": "https",
+					"host": [
+						"jsonplaceholder",
+						"typicode",
+						"com"
+					],
+					"path": [
+						"comments",
+						"8"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get All Albums",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Response status code is 200\", function () {\r",
+							"  pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response time is less than 500ms\", function () {\r",
+							"  pm.expect(pm.response.responseTime).to.be.below(500);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response is an array\", function () {\r",
+							"  const response = pm.response.json();\r",
+							"  pm.expect(response).to.be.an('array');\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Each album has the required fields\", function () {\r",
+							"  const response = pm.response.json();\r",
+							"  response.forEach(album => {\r",
+							"    pm.expect(album).to.have.property('userId');\r",
+							"    pm.expect(album).to.have.property('id');\r",
+							"    pm.expect(album).to.have.property('title');\r",
+							"  });\r",
+							"});\r",
+							"\r",
+							"pm.test(\"First album has correct data\", function () {\r",
+							"  const response = pm.response.json();\r",
+							"  const firstAlbum = response[0];\r",
+							"  \r",
+							"  pm.expect(firstAlbum.userId).to.eql(1);\r",
+							"  pm.expect(firstAlbum.id).to.eql(1);\r",
+							"  pm.expect(firstAlbum.title).to.eql(\"quidem molestiae enim\");\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://jsonplaceholder.typicode.com/albums",
+					"protocol": "https",
+					"host": [
+						"jsonplaceholder",
+						"typicode",
+						"com"
+					],
+					"path": [
+						"albums"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Album by ID",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Response status code is 200\", function () {\r",
+							"  pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response time is less than 500ms\", function () {\r",
+							"  pm.expect(pm.response.responseTime).to.be.below(500);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response has the required fields\", function () {\r",
+							"  const response = pm.response.json();\r",
+							"  pm.expect(response).to.have.property('userId');\r",
+							"  pm.expect(response).to.have.property('id');\r",
+							"  pm.expect(response).to.have.property('title');\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response has correct data\", function () {\r",
+							"  const response = pm.response.json();\r",
+							"  pm.expect(response.userId).to.eql(1);\r",
+							"  pm.expect(response.id).to.eql(6);\r",
+							"  pm.expect(response.title).to.eql(\"natus impedit quibusdam illo est\");\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://jsonplaceholder.typicode.com/albums/6",
+					"protocol": "https",
+					"host": [
+						"jsonplaceholder",
+						"typicode",
+						"com"
+					],
+					"path": [
+						"albums",
+						"6"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create Album",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Response status code is 201\", function () {\r",
+							"  pm.response.to.have.status(201);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response time is less than 500ms\", function () {\r",
+							"  pm.expect(pm.response.responseTime).to.be.below(500);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response has the required fields\", function () {\r",
+							"  const response = pm.response.json();\r",
+							"  pm.expect(response).to.have.property('id');\r",
+							"  pm.expect(response).to.have.property('title');\r",
+							"  pm.expect(response).to.have.property('userId');\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response has correct data\", function () {\r",
+							"  const response = pm.response.json();\r",
+							"  pm.expect(response.id).to.eql(101);\r",
+							"  pm.expect(response.title).to.eql(\"Awesome Album\");\r",
+							"  pm.expect(response.userId).to.eql(7);\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"title\": \"Awesome Album\",\r\n    \"userId\": 7\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://jsonplaceholder.typicode.com/albums",
+					"protocol": "https",
+					"host": [
+						"jsonplaceholder",
+						"typicode",
+						"com"
+					],
+					"path": [
+						"albums"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update Album",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Response status code is 200\", function () {\r",
+							"  pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response time is less than 500ms\", function () {\r",
+							"  pm.expect(pm.response.responseTime).to.be.below(500);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response has the required fields\", function () {\r",
+							"  const response = pm.response.json();\r",
+							"  pm.expect(response).to.have.property('id');\r",
+							"  pm.expect(response).to.have.property('title');\r",
+							"  pm.expect(response).to.have.property('userId');\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response has correct data\", function () {\r",
+							"  const response = pm.response.json();\r",
+							"  pm.expect(response.id).to.eql(9);\r",
+							"  pm.expect(response.title).to.eql(\"New title\");\r",
+							"  pm.expect(response.userId).to.eql(1);\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"userId\": 1,\r\n    \"id\": 9,\r\n    \"title\": \"New title\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://jsonplaceholder.typicode.com/albums/9",
+					"protocol": "https",
+					"host": [
+						"jsonplaceholder",
+						"typicode",
+						"com"
+					],
+					"path": [
+						"albums",
+						"9"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete Album",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Response status code is 200\", function () {\r",
+							"  pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response time is less than 500ms\", function () {\r",
+							"  pm.expect(pm.response.responseTime).to.be.below(500);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response body is empty\", function () {\r",
+							"  const response = pm.response.json();\r",
+							"  pm.expect(response).to.be.empty;\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "https://jsonplaceholder.typicode.com/albums/9",
+					"protocol": "https",
+					"host": [
+						"jsonplaceholder",
+						"typicode",
+						"com"
+					],
+					"path": [
+						"albums",
+						"9"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get All Photos",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Response status code is 200\", function () {\r",
+							"  pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response time is less than 500ms\", function () {\r",
+							"  pm.expect(pm.response.responseTime).to.be.below(500);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response is an array\", function () {\r",
+							"  const response = pm.response.json();\r",
+							"  pm.expect(response).to.be.an('array');\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Each photo has the required fields\", function () {\r",
+							"  const response = pm.response.json();\r",
+							"  response.forEach(photo => {\r",
+							"    pm.expect(photo).to.have.property('albumId');\r",
+							"    pm.expect(photo).to.have.property('id');\r",
+							"    pm.expect(photo).to.have.property('title');\r",
+							"    pm.expect(photo).to.have.property('url');\r",
+							"    pm.expect(photo).to.have.property('thumbnailUrl');\r",
+							"  });\r",
+							"});\r",
+							"\r",
+							"pm.test(\"First photo has correct data\", function () {\r",
+							"  const response = pm.response.json();\r",
+							"  const firstPhoto = response[0];\r",
+							"  \r",
+							"  pm.expect(firstPhoto.albumId).to.eql(1);\r",
+							"  pm.expect(firstPhoto.id).to.eql(1);\r",
+							"  pm.expect(firstPhoto.title).to.eql(\"accusamus beatae ad facilis cum similique qui sunt\");\r",
+							"  pm.expect(firstPhoto.url).to.eql(\"https://via.placeholder.com/600/92c952\");\r",
+							"  pm.expect(firstPhoto.thumbnailUrl).to.eql(\"https://via.placeholder.com/150/92c952\");\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://jsonplaceholder.typicode.com/photos",
+					"protocol": "https",
+					"host": [
+						"jsonplaceholder",
+						"typicode",
+						"com"
+					],
+					"path": [
+						"photos"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Photo by ID",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Response status code is 200\", function () {\r",
+							"  pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response time is less than 500ms\", function () {\r",
+							"  pm.expect(pm.response.responseTime).to.be.below(500);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response has the required fields\", function () {\r",
+							"  const response = pm.response.json();\r",
+							"  pm.expect(response).to.have.property('albumId');\r",
+							"  pm.expect(response).to.have.property('id');\r",
+							"  pm.expect(response).to.have.property('title');\r",
+							"  pm.expect(response).to.have.property('url');\r",
+							"  pm.expect(response).to.have.property('thumbnailUrl');\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response has correct data\", function () {\r",
+							"  const response = pm.response.json();\r",
+							"  pm.expect(response.albumId).to.eql(1);\r",
+							"  pm.expect(response.id).to.eql(6);\r",
+							"  pm.expect(response.title).to.eql(\"accusamus ea aliquid et amet sequi nemo\");\r",
+							"  pm.expect(response.url).to.eql(\"https://via.placeholder.com/600/56a8c2\");\r",
+							"  pm.expect(response.thumbnailUrl).to.eql(\"https://via.placeholder.com/150/56a8c2\");\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://jsonplaceholder.typicode.com/photos/6",
+					"protocol": "https",
+					"host": [
+						"jsonplaceholder",
+						"typicode",
+						"com"
+					],
+					"path": [
+						"photos",
+						"6"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create Photo",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Response status code is 201\", function () {\r",
+							"  pm.response.to.have.status(201);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response time is less than 500ms\", function () {\r",
+							"  pm.expect(pm.response.responseTime).to.be.below(500);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response has the required fields\", function () {\r",
+							"  const response = pm.response.json();\r",
+							"  pm.expect(response).to.have.property('title');\r",
+							"  pm.expect(response).to.have.property('url');\r",
+							"  pm.expect(response).to.have.property('thumbnailUrl');\r",
+							"  pm.expect(response).to.have.property('albumId');\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response has correct data\", function () {\r",
+							"  const response = pm.response.json();\r",
+							"  pm.expect(response.title).to.eql(\"New Photo\");\r",
+							"  pm.expect(response.url).to.eql(\"https://via.placeholder.com/600/92c952\");\r",
+							"  pm.expect(response.thumbnailUrl).to.eql(\"https://via.placeholder.com/150/92c952\");\r",
+							"  pm.expect(response.albumId).to.eql(8);\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"title\": \"New Photo\",\r\n  \"url\": \"https://via.placeholder.com/600/92c952\",\r\n  \"thumbnailUrl\": \"https://via.placeholder.com/150/92c952\",\r\n  \"albumId\": 8\r\n}\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://jsonplaceholder.typicode.com/photos",
+					"protocol": "https",
+					"host": [
+						"jsonplaceholder",
+						"typicode",
+						"com"
+					],
+					"path": [
+						"photos"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update Photo",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Response status code is 200\", function () {\r",
+							"  pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response time is less than 500ms\", function () {\r",
+							"  pm.expect(pm.response.responseTime).to.be.below(500);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response has the required fields\", function () {\r",
+							"  const response = pm.response.json();\r",
+							"  pm.expect(response).to.have.property('id');\r",
+							"  pm.expect(response).to.have.property('title');\r",
+							"  pm.expect(response).to.have.property('url');\r",
+							"  pm.expect(response).to.have.property('thumbnailUrl');\r",
+							"  pm.expect(response).to.have.property('albumId');\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response has correct data\", function () {\r",
+							"  const response = pm.response.json();\r",
+							"  pm.expect(response.id).to.eql(6); // Note: The returned ID in the prompt seems to differ from the request ID\r",
+							"  pm.expect(response.title).to.eql(\"Update title\");\r",
+							"  pm.expect(response.url).to.eql(\"https://via.placeholder.com/600/92c952\");\r",
+							"  pm.expect(response.thumbnailUrl).to.eql(\"https://via.placeholder.com/150/92c952\");\r",
+							"  pm.expect(response.albumId).to.eql(1);\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"id\": 1,\r\n  \"title\": \"Update title\",\r\n  \"url\": \"https://via.placeholder.com/600/92c952\",\r\n  \"thumbnailUrl\": \"https://via.placeholder.com/150/92c952\",\r\n  \"albumId\": 1\r\n}\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://jsonplaceholder.typicode.com/photos/6",
+					"protocol": "https",
+					"host": [
+						"jsonplaceholder",
+						"typicode",
+						"com"
+					],
+					"path": [
+						"photos",
+						"6"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete Photo",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Response status code is 200\", function () {\r",
+							"  pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response time is less than 500ms\", function () {\r",
+							"  pm.expect(pm.response.responseTime).to.be.below(500);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response body is empty\", function () {\r",
+							"  const response = pm.response.json();\r",
+							"  pm.expect(response).to.be.empty;\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "https://jsonplaceholder.typicode.com/photos/2",
+					"protocol": "https",
+					"host": [
+						"jsonplaceholder",
+						"typicode",
+						"com"
+					],
+					"path": [
+						"photos",
+						"2"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get All Todos",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Response status code is 200\", function () {\r",
+							"  pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response time is less than 500ms\", function () {\r",
+							"  pm.expect(pm.response.responseTime).to.be.below(500);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response is an array\", function () {\r",
+							"  const response = pm.response.json();\r",
+							"  pm.expect(response).to.be.an('array');\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Each todo has the required fields\", function () {\r",
+							"  const response = pm.response.json();\r",
+							"  response.forEach(todo => {\r",
+							"    pm.expect(todo).to.have.property('userId');\r",
+							"    pm.expect(todo).to.have.property('id');\r",
+							"    pm.expect(todo).to.have.property('title');\r",
+							"    pm.expect(todo).to.have.property('completed');\r",
+							"  });\r",
+							"});\r",
+							"\r",
+							"pm.test(\"First todo has correct data\", function () {\r",
+							"  const response = pm.response.json();\r",
+							"  const firstTodo = response[0];\r",
+							"  \r",
+							"  pm.expect(firstTodo.userId).to.eql(1);\r",
+							"  pm.expect(firstTodo.id).to.eql(1);\r",
+							"  pm.expect(firstTodo.title).to.eql(\"delectus aut autem\");\r",
+							"  pm.expect(firstTodo.completed).to.eql(false);\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://jsonplaceholder.typicode.com/todos",
+					"protocol": "https",
+					"host": [
+						"jsonplaceholder",
+						"typicode",
+						"com"
+					],
+					"path": [
+						"todos"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Todo by ID",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Response status code is 200\", function () {\r",
+							"  pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response time is less than 500ms\", function () {\r",
+							"  pm.expect(pm.response.responseTime).to.be.below(500);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response has the required fields\", function () {\r",
+							"  const response = pm.response.json();\r",
+							"  pm.expect(response).to.have.property('userId');\r",
+							"  pm.expect(response).to.have.property('id');\r",
+							"  pm.expect(response).to.have.property('title');\r",
+							"  pm.expect(response).to.have.property('completed');\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response has correct data\", function () {\r",
+							"  const response = pm.response.json();\r",
+							"  pm.expect(response.userId).to.eql(2);\r",
+							"  pm.expect(response.id).to.eql(32);\r",
+							"  pm.expect(response.title).to.eql(\"earum doloribus ea doloremque quis\");\r",
+							"  pm.expect(response.completed).to.eql(false);\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://jsonplaceholder.typicode.com/todos/32",
+					"protocol": "https",
+					"host": [
+						"jsonplaceholder",
+						"typicode",
+						"com"
+					],
+					"path": [
+						"todos",
+						"32"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create Todo",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Response status code is 201\", function () {\r",
+							"  pm.response.to.have.status(201);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response time is less than 500ms\", function () {\r",
+							"  pm.expect(pm.response.responseTime).to.be.below(500);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response has the required fields\", function () {\r",
+							"  const response = pm.response.json();\r",
+							"  pm.expect(response).to.have.property('id');\r",
+							"  pm.expect(response).to.have.property('title');\r",
+							"  pm.expect(response).to.have.property('completed');\r",
+							"  pm.expect(response).to.have.property('userId');\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response has correct data\", function () {\r",
+							"  const response = pm.response.json();\r",
+							"  pm.expect(response.id).to.eql(201);\r",
+							"  pm.expect(response.title).to.eql(\"New Todo\");\r",
+							"  pm.expect(response.completed).to.eql(false);\r",
+							"  pm.expect(response.userId).to.eql(3);\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"title\": \"New Todo\",\r\n  \"completed\": false,\r\n  \"userId\": 3\r\n}\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://jsonplaceholder.typicode.com/todos",
+					"protocol": "https",
+					"host": [
+						"jsonplaceholder",
+						"typicode",
+						"com"
+					],
+					"path": [
+						"todos"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update Todo",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Response status code is 200\", function () {\r",
+							"  pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response time is less than 500ms\", function () {\r",
+							"  pm.expect(pm.response.responseTime).to.be.below(500);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response has the required fields\", function () {\r",
+							"  const response = pm.response.json();\r",
+							"  pm.expect(response).to.have.property('id');\r",
+							"  pm.expect(response).to.have.property('title');\r",
+							"  pm.expect(response).to.have.property('completed');\r",
+							"  pm.expect(response).to.have.property('userId');\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response has correct data\", function () {\r",
+							"  const response = pm.response.json();\r",
+							"  pm.expect(response.id).to.eql(8);\r",
+							"  pm.expect(response.title).to.eql(\"Updated Todo\");\r",
+							"  pm.expect(response.completed).to.eql(true);\r",
+							"  pm.expect(response.userId).to.eql(1);\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"id\": 8,\r\n  \"title\": \"Updated Todo\",\r\n  \"completed\": true,\r\n  \"userId\": 1\r\n}\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://jsonplaceholder.typicode.com/todos/8",
+					"protocol": "https",
+					"host": [
+						"jsonplaceholder",
+						"typicode",
+						"com"
+					],
+					"path": [
+						"todos",
+						"8"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete Todo",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Response status code is 200\", function () {\r",
+							"  pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response time is less than 500ms\", function () {\r",
+							"  pm.expect(pm.response.responseTime).to.be.below(500);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response body is empty\", function () {\r",
+							"  const response = pm.response.json();\r",
+							"  pm.expect(response).to.be.empty;\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "https://jsonplaceholder.typicode.com/todos/4",
+					"protocol": "https",
+					"host": [
+						"jsonplaceholder",
+						"typicode",
+						"com"
+					],
+					"path": [
+						"todos",
+						"4"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get All Users",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Response status code is 200\", function () {\r",
+							"  pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response time is less than 500ms\", function () {\r",
+							"  pm.expect(pm.response.responseTime).to.be.below(500);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response is an array\", function () {\r",
+							"  const response = pm.response.json();\r",
+							"  pm.expect(response).to.be.an('array');\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Each user has the required fields\", function () {\r",
+							"  const response = pm.response.json();\r",
+							"  response.forEach(user => {\r",
+							"    pm.expect(user).to.have.property('id');\r",
+							"    pm.expect(user).to.have.property('name');\r",
+							"    pm.expect(user).to.have.property('username');\r",
+							"    pm.expect(user).to.have.property('email');\r",
+							"    pm.expect(user).to.have.property('address');\r",
+							"    pm.expect(user).to.have.property('phone');\r",
+							"    pm.expect(user).to.have.property('website');\r",
+							"    pm.expect(user).to.have.property('company');\r",
+							"\r",
+							"    pm.expect(user.address).to.have.property('street');\r",
+							"    pm.expect(user.address).to.have.property('suite');\r",
+							"    pm.expect(user.address).to.have.property('city');\r",
+							"    pm.expect(user.address).to.have.property('zipcode');\r",
+							"    pm.expect(user.address.geo).to.have.property('lat');\r",
+							"    pm.expect(user.address.geo).to.have.property('lng');\r",
+							"    \r",
+							"    pm.expect(user.company).to.have.property('name');\r",
+							"    pm.expect(user.company).to.have.property('catchPhrase');\r",
+							"    pm.expect(user.company).to.have.property('bs');\r",
+							"  });\r",
+							"});\r",
+							"\r",
+							"pm.test(\"First user has correct data\", function () {\r",
+							"  const response = pm.response.json();\r",
+							"  const firstUser = response[0];\r",
+							"  \r",
+							"  pm.expect(firstUser.id).to.eql(1);\r",
+							"  pm.expect(firstUser.name).to.eql(\"Leanne Graham\");\r",
+							"  pm.expect(firstUser.username).to.eql(\"Bret\");\r",
+							"  pm.expect(firstUser.email).to.eql(\"Sincere@april.biz\");\r",
+							"  pm.expect(firstUser.address.street).to.eql(\"Kulas Light\");\r",
+							"  pm.expect(firstUser.address.suite).to.eql(\"Apt. 556\");\r",
+							"  pm.expect(firstUser.address.city).to.eql(\"Gwenborough\");\r",
+							"  pm.expect(firstUser.address.zipcode).to.eql(\"92998-3874\");\r",
+							"  pm.expect(firstUser.address.geo.lat).to.eql(\"-37.3159\");\r",
+							"  pm.expect(firstUser.address.geo.lng).to.eql(\"81.1496\");\r",
+							"  pm.expect(firstUser.phone).to.eql(\"1-770-736-8031 x56442\");\r",
+							"  pm.expect(firstUser.website).to.eql(\"hildegard.org\");\r",
+							"  pm.expect(firstUser.company.name).to.eql(\"Romaguera-Crona\");\r",
+							"  pm.expect(firstUser.company.catchPhrase).to.eql(\"Multi-layered client-server neural-net\");\r",
+							"  pm.expect(firstUser.company.bs).to.eql(\"harness real-time e-markets\");\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://jsonplaceholder.typicode.com/users",
+					"protocol": "https",
+					"host": [
+						"jsonplaceholder",
+						"typicode",
+						"com"
+					],
+					"path": [
+						"users"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get User by ID",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Response status code is 200\", function () {\r",
+							"  pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response time is less than 500ms\", function () {\r",
+							"  pm.expect(pm.response.responseTime).to.be.below(500);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response has the required fields\", function () {\r",
+							"  const response = pm.response.json();\r",
+							"  pm.expect(response).to.have.property('id');\r",
+							"  pm.expect(response).to.have.property('name');\r",
+							"  pm.expect(response).to.have.property('username');\r",
+							"  pm.expect(response).to.have.property('email');\r",
+							"  pm.expect(response).to.have.property('address');\r",
+							"  pm.expect(response).to.have.property('phone');\r",
+							"  pm.expect(response).to.have.property('website');\r",
+							"  pm.expect(response).to.have.property('company');\r",
+							"\r",
+							"  pm.expect(response.address).to.have.property('street');\r",
+							"  pm.expect(response.address).to.have.property('suite');\r",
+							"  pm.expect(response.address).to.have.property('city');\r",
+							"  pm.expect(response.address).to.have.property('zipcode');\r",
+							"  pm.expect(response.address.geo).to.have.property('lat');\r",
+							"  pm.expect(response.address.geo).to.have.property('lng');\r",
+							"\r",
+							"  pm.expect(response.company).to.have.property('name');\r",
+							"  pm.expect(response.company).to.have.property('catchPhrase');\r",
+							"  pm.expect(response.company).to.have.property('bs');\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response has correct data\", function () {\r",
+							"  const response = pm.response.json();\r",
+							"  pm.expect(response.id).to.eql(9);\r",
+							"  pm.expect(response.name).to.eql(\"Glenna Reichert\");\r",
+							"  pm.expect(response.username).to.eql(\"Delphine\");\r",
+							"  pm.expect(response.email).to.eql(\"Chaim_McDermott@dana.io\");\r",
+							"  pm.expect(response.address.street).to.eql(\"Dayna Park\");\r",
+							"  pm.expect(response.address.suite).to.eql(\"Suite 449\");\r",
+							"  pm.expect(response.address.city).to.eql(\"Bartholomebury\");\r",
+							"  pm.expect(response.address.zipcode).to.eql(\"76495-3109\");\r",
+							"  pm.expect(response.address.geo.lat).to.eql(\"24.6463\");\r",
+							"  pm.expect(response.address.geo.lng).to.eql(\"-168.8889\");\r",
+							"  pm.expect(response.phone).to.eql(\"(775)976-6794 x41206\");\r",
+							"  pm.expect(response.website).to.eql(\"conrad.com\");\r",
+							"  pm.expect(response.company.name).to.eql(\"Yost and Sons\");\r",
+							"  pm.expect(response.company.catchPhrase).to.eql(\"Switchable contextually-based project\");\r",
+							"  pm.expect(response.company.bs).to.eql(\"aggregate real-time technologies\");\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://jsonplaceholder.typicode.com/users/9",
+					"protocol": "https",
+					"host": [
+						"jsonplaceholder",
+						"typicode",
+						"com"
+					],
+					"path": [
+						"users",
+						"9"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create User",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Response status code is 201\", function () {\r",
+							"  pm.response.to.have.status(201);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response time is less than 500ms\", function () {\r",
+							"  pm.expect(pm.response.responseTime).to.be.below(500);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response has the required fields\", function () {\r",
+							"  const response = pm.response.json();\r",
+							"  pm.expect(response).to.have.property('id');\r",
+							"  pm.expect(response).to.have.property('name');\r",
+							"  pm.expect(response).to.have.property('username');\r",
+							"  pm.expect(response).to.have.property('email');\r",
+							"  pm.expect(response).to.have.property('address');\r",
+							"  pm.expect(response).to.have.property('phone');\r",
+							"  pm.expect(response).to.have.property('website');\r",
+							"  pm.expect(response).to.have.property('company');\r",
+							"\r",
+							"  pm.expect(response.address).to.have.property('street');\r",
+							"  pm.expect(response.address).to.have.property('suite');\r",
+							"  pm.expect(response.address).to.have.property('city');\r",
+							"  pm.expect(response.address).to.have.property('zipcode');\r",
+							"  pm.expect(response.address.geo).to.have.property('lat');\r",
+							"  pm.expect(response.address.geo).to.have.property('lng');\r",
+							"\r",
+							"  pm.expect(response.company).to.have.property('name');\r",
+							"  pm.expect(response.company).to.have.property('catchPhrase');\r",
+							"  pm.expect(response.company).to.have.property('bs');\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response has correct data\", function () {\r",
+							"  const response = pm.response.json();\r",
+							"  pm.expect(response.name).to.eql(\"shreys\");\r",
+							"  pm.expect(response.username).to.eql(\"shreysname\");\r",
+							"  pm.expect(response.email).to.eql(\"shreysname@gmail.com\");\r",
+							"  pm.expect(response.address.street).to.eql(\"Dayna Park\");\r",
+							"  pm.expect(response.address.suite).to.eql(\"Suite 449\");\r",
+							"  pm.expect(response.address.city).to.eql(\"Bartholomebury\");\r",
+							"  pm.expect(response.address.zipcode).to.eql(\"76495-3109\");\r",
+							"  pm.expect(response.address.geo.lat).to.eql(\"24.6463\");\r",
+							"  pm.expect(response.address.geo.lng).to.eql(\"-168.8889\");\r",
+							"  pm.expect(response.phone).to.eql(\"(775)976-6794 x41206\");\r",
+							"  pm.expect(response.website).to.eql(\"conrad.com\");\r",
+							"  pm.expect(response.company.name).to.eql(\"Yost and Sons\");\r",
+							"  pm.expect(response.company.catchPhrase).to.eql(\"Switchable contextually-based project\");\r",
+							"  pm.expect(response.company.bs).to.eql(\"aggregate real-time technologies\");\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"name\": \"shreys\",\r\n  \"username\": \"shreysname\",\r\n  \"email\": \"shreysname@gmail.com\",\r\n  \"address\": {\r\n    \"street\": \"Dayna Park\",\r\n    \"suite\": \"Suite 449\",\r\n    \"city\": \"Bartholomebury\",\r\n    \"zipcode\": \"76495-3109\",\r\n    \"geo\": {\r\n      \"lat\": \"24.6463\",\r\n      \"lng\": \"-168.8889\"\r\n    }\r\n  },\r\n  \"phone\": \"(775)976-6794 x41206\",\r\n  \"website\": \"conrad.com\",\r\n  \"company\": {\r\n    \"name\": \"Yost and Sons\",\r\n    \"catchPhrase\": \"Switchable contextually-based project\",\r\n    \"bs\": \"aggregate real-time technologies\"\r\n  }\r\n}\r\n\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://jsonplaceholder.typicode.com/users",
+					"protocol": "https",
+					"host": [
+						"jsonplaceholder",
+						"typicode",
+						"com"
+					],
+					"path": [
+						"users"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update User",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Response status code is 200\", function () {\r",
+							"  pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response time is less than 500ms\", function () {\r",
+							"  pm.expect(pm.response.responseTime).to.be.below(500);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response has the required fields\", function () {\r",
+							"  const response = pm.response.json();\r",
+							"  pm.expect(response).to.have.property('id');\r",
+							"  pm.expect(response).to.have.property('name');\r",
+							"  pm.expect(response).to.have.property('username');\r",
+							"  pm.expect(response).to.have.property('email');\r",
+							"  pm.expect(response).to.have.property('address');\r",
+							"  pm.expect(response).to.have.property('phone');\r",
+							"  pm.expect(response).to.have.property('website');\r",
+							"  pm.expect(response).to.have.property('company');\r",
+							"\r",
+							"  pm.expect(response.address).to.have.property('street');\r",
+							"  pm.expect(response.address).to.have.property('suite');\r",
+							"  pm.expect(response.address).to.have.property('city');\r",
+							"  pm.expect(response.address).to.have.property('zipcode');\r",
+							"  pm.expect(response.address.geo).to.have.property('lat');\r",
+							"  pm.expect(response.address.geo).to.have.property('lng');\r",
+							"\r",
+							"  pm.expect(response.company).to.have.property('name');\r",
+							"  pm.expect(response.company).to.have.property('catchPhrase');\r",
+							"  pm.expect(response.company).to.have.property('bs');\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response has correct data\", function () {\r",
+							"  const response = pm.response.json();\r",
+							"  pm.expect(response.name).to.eql(\"shreys\");\r",
+							"  pm.expect(response.username).to.eql(\"shreysname\");\r",
+							"  pm.expect(response.email).to.eql(\"shreysname@gmail.com\");\r",
+							"  pm.expect(response.address.street).to.eql(\"Dayna Park\");\r",
+							"  pm.expect(response.address.suite).to.eql(\"Suite 449\");\r",
+							"  pm.expect(response.address.city).to.eql(\"Bartholomebury\");\r",
+							"  pm.expect(response.address.zipcode).to.eql(\"76495-3109\");\r",
+							"  pm.expect(response.address.geo.lat).to.eql(\"24.6463\");\r",
+							"  pm.expect(response.address.geo.lng).to.eql(\"-168.8889\");\r",
+							"  pm.expect(response.phone).to.eql(\"(775)976-6794 x41206\");\r",
+							"  pm.expect(response.website).to.eql(\"conrad.com\");\r",
+							"  pm.expect(response.company.name).to.eql(\"Yost and Sons\");\r",
+							"  pm.expect(response.company.catchPhrase).to.eql(\"Switchable contextually-based project\");\r",
+							"  pm.expect(response.company.bs).to.eql(\"aggregate real-time technologies\");\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"name\": \"shreys\",\r\n  \"username\": \"shreysname\",\r\n  \"email\": \"shreysname@gmail.com\",\r\n  \"address\": {\r\n    \"street\": \"Dayna Park\",\r\n    \"suite\": \"Suite 449\",\r\n    \"city\": \"Bartholomebury\",\r\n    \"zipcode\": \"76495-3109\",\r\n    \"geo\": {\r\n      \"lat\": \"24.6463\",\r\n      \"lng\": \"-168.8889\"\r\n    }\r\n  },\r\n  \"phone\": \"(775)976-6794 x41206\",\r\n  \"website\": \"conrad.com\",\r\n  \"company\": {\r\n    \"name\": \"Yost and Sons\",\r\n    \"catchPhrase\": \"Switchable contextually-based project\",\r\n    \"bs\": \"aggregate real-time technologies\"\r\n  }\r\n}\r\n\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://jsonplaceholder.typicode.com/users/10",
+					"protocol": "https",
+					"host": [
+						"jsonplaceholder",
+						"typicode",
+						"com"
+					],
+					"path": [
+						"users",
+						"10"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete User",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Response status code is 200\", function () {\r",
+							"  pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response time is less than 500ms\", function () {\r",
+							"  pm.expect(pm.response.responseTime).to.be.below(500);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response body is empty\", function () {\r",
+							"  const response = pm.response.json();\r",
+							"  pm.expect(response).to.be.empty;\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "https://jsonplaceholder.typicode.com/users/10",
+					"protocol": "https",
+					"host": [
+						"jsonplaceholder",
+						"typicode",
+						"com"
+					],
+					"path": [
+						"users",
+						"10"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
