@@ -289,6 +289,208 @@ namespace MyAnimeListTests
         }
 
         [Test]
+        public void PM01UpdateProfileInformation_NewBio_Successful()
+        {
+            Login();
+
+            // Navigate to the profile settings page
+            driver.Navigate().GoToUrl("https://myanimelist.net/editprofile.php");
+
+            // Wait until the page is fully loaded
+            wait.Until(driver => ((IJavaScriptExecutor)driver).ExecuteScript("return document.readyState").Equals("complete"));
+
+            // Locate the "About Me" textarea and update its value
+            IWebElement aboutMeTextArea = driver.FindElement(By.Id("classic-about-me-textarea"));
+            string newBio = "New Bio"; // The new profile information to be entered
+            aboutMeTextArea.Clear(); // Clear any existing text
+            aboutMeTextArea.SendKeys(newBio); // Enter the new bio
+
+            // Locate the submit button and click it
+            IWebElement submitButton = driver.FindElement(By.Name("submit"));
+            submitButton.Click();
+
+            // Wait for the profile update confirmation
+            wait.Until(driver => driver.FindElement(By.CssSelector("div.goodresult")).Displayed &&
+                      driver.FindElement(By.CssSelector("div.goodresult")).Text.Contains("Successfully updated your profile."));
+
+
+            // Verify that the success message is displayed correctly
+            string successMessage = driver.FindElement(By.CssSelector("div.goodresult")).Text;
+            ClassicAssert.IsTrue(successMessage.Contains("Successfully updated your profile."), "Success message is not displayed or is incorrect.");
+
+            // Navigate to the profile page to verify the updated bio
+            driver.Navigate().GoToUrl("https://myanimelist.net/profile/" + testUserName); // Replace with actual profile URL
+
+            // Locate the updated bio on the profile page using the provided XPath
+            IWebElement bioElement = driver.FindElement(By.XPath("/html/body/div[1]/div[2]/div[3]/div[2]/div/div[2]/div[1]/div/table/tbody/tr/td/div"));
+
+            // Verify the updated bio
+            string displayedBio = bioElement.Text.Trim();
+            ClassicAssert.AreEqual("New Bio", displayedBio, "Profile information was not updated successfully.");
+        }
+
+        [Test]
+        public void PM02UpdateCommentSettings_DisallowComments_Successful()
+        {
+            Login();
+
+            // Navigate to the profile settings page
+            driver.Navigate().GoToUrl("https://myanimelist.net/editprofile.php");
+
+            // Wait until the page is fully loaded
+            wait.Until(driver => ((IJavaScriptExecutor)driver).ExecuteScript("return document.readyState").Equals("complete"));
+
+            // Locate the comment settings dropdown
+            IWebElement commentSettingsDropdown = driver.FindElement(By.Name("mem_comments"));
+
+            // Create a SelectElement instance to interact with the dropdown
+            var selectElement = new SelectElement(commentSettingsDropdown);
+
+            // Select an option, "Disallow Comments"
+            selectElement.SelectByValue("0");
+
+            // Locate and click the submit button
+            IWebElement submitButton = driver.FindElement(By.Name("submit"));
+            submitButton.Click();
+
+            // Wait for success message
+            wait.Until(driver => driver.FindElement(By.CssSelector("div.goodresult")).Displayed &&
+                                 driver.FindElement(By.CssSelector("div.goodresult")).Text.Contains("Successfully updated your profile."));
+
+            // Assert success message
+            ClassicAssert.IsTrue(driver.FindElement(By.CssSelector("div.goodresult")).Displayed);
+            ClassicAssert.IsTrue(driver.FindElement(By.CssSelector("div.goodresult")).Text.Contains("Successfully updated your profile."));
+        }
+
+        [Test]
+        public void PM03UpdateGender_NonBinary_Successful()
+        {
+            Login();
+
+            // Navigate to profile settings
+            driver.Navigate().GoToUrl("https://myanimelist.net/editprofile.php");
+
+            // Select gender dropdown and update to 'Non-Binary'
+            var genderDropdown = new SelectElement(driver.FindElement(By.Name("gender")));
+            genderDropdown.SelectByText("Non-Binary");
+
+            // Click submit button
+            driver.FindElement(By.Name("submit")).Click();
+
+            // Wait for success message
+            wait.Until(driver => driver.FindElement(By.CssSelector("div.goodresult")).Displayed &&
+                                 driver.FindElement(By.CssSelector("div.goodresult")).Text.Contains("Successfully updated your profile."));
+
+            // Assert success message
+            ClassicAssert.IsTrue(driver.FindElement(By.CssSelector("div.goodresult")).Displayed);
+            ClassicAssert.IsTrue(driver.FindElement(By.CssSelector("div.goodresult")).Text.Contains("Successfully updated your profile."));
+        }
+
+        [Test]
+        public void PM04UpdateBirthday_BirthDay_Successful()
+        {
+            Login();
+
+            // Navigate to profile settings
+            driver.Navigate().GoToUrl("https://myanimelist.net/editprofile.php");
+
+            // Select birthday dropdowns
+            var monthDropdown = new SelectElement(driver.FindElement(By.Name("bmonth")));
+            monthDropdown.SelectByText("Dec");
+
+            var dayDropdown = new SelectElement(driver.FindElement(By.Name("bday")));
+            dayDropdown.SelectByText("25");
+
+            var yearDropdown = new SelectElement(driver.FindElement(By.Name("byear")));
+            yearDropdown.SelectByText("2000");
+
+            // Click submit button
+            driver.FindElement(By.Name("submit")).Click();
+
+            // Wait for success message
+            wait.Until(driver => driver.FindElement(By.CssSelector("div.goodresult")).Displayed &&
+                                 driver.FindElement(By.CssSelector("div.goodresult")).Text.Contains("Successfully updated your profile."));
+
+            // Assert success message
+            ClassicAssert.IsTrue(driver.FindElement(By.CssSelector("div.goodresult")).Displayed);
+            ClassicAssert.IsTrue(driver.FindElement(By.CssSelector("div.goodresult")).Text.Contains("Successfully updated your profile."));
+        }
+
+        [Test]
+        public void PM05UpdateLocation_NewYorkNY_Successful()
+        {
+            Login();
+
+            // Navigate to profile settings
+            driver.Navigate().GoToUrl("https://myanimelist.net/editprofile.php");
+
+            // Input new location
+            IWebElement locationInput = driver.FindElement(By.Name("location"));
+            locationInput.Clear();
+            locationInput.SendKeys("New York, NY");
+
+            // Click submit button
+            driver.FindElement(By.Name("submit")).Click();
+
+            // Wait for success message
+            wait.Until(driver => driver.FindElement(By.CssSelector("div.goodresult")).Displayed &&
+                                 driver.FindElement(By.CssSelector("div.goodresult")).Text.Contains("Successfully updated your profile."));
+
+            // Assert success message
+            ClassicAssert.IsTrue(driver.FindElement(By.CssSelector("div.goodresult")).Displayed);
+            ClassicAssert.IsTrue(driver.FindElement(By.CssSelector("div.goodresult")).Text.Contains("Successfully updated your profile."));
+        }
+
+        [Test]
+        public void PM06UpdateExternalLinks_Links_Successful()
+        {
+            Login();
+
+            // Navigate to profile settings
+            driver.Navigate().GoToUrl("https://myanimelist.net/editprofile.php");
+
+            // Input new external links
+            var externalLinksTextarea = driver.FindElement(By.Name("external_links"));
+            externalLinksTextarea.Clear();
+            externalLinksTextarea.SendKeys("https://github.com/username\nhttps://twitter.com/username");
+
+            // Click submit button
+            driver.FindElement(By.Name("submit")).Click();
+
+            // Wait for success message
+            wait.Until(driver => driver.FindElement(By.CssSelector("div.goodresult")).Displayed &&
+                                 driver.FindElement(By.CssSelector("div.goodresult")).Text.Contains("Successfully updated your profile."));
+
+            // Assert success message
+            ClassicAssert.IsTrue(driver.FindElement(By.CssSelector("div.goodresult")).Displayed);
+            ClassicAssert.IsTrue(driver.FindElement(By.CssSelector("div.goodresult")).Text.Contains("Successfully updated your profile."));
+        }
+
+        [Test]
+        public void PM07UpdateAboutMeStyle_AboutMeOption_Successful()
+        {
+            Login();
+
+            // Navigate to profile settings
+            driver.Navigate().GoToUrl("https://myanimelist.net/editprofile.php");
+
+            // Select "Modern" for About Me Style
+            var modernRadioButton = driver.FindElement(By.Id("about_me_setting_1"));
+            modernRadioButton.Click();
+
+            // Click submit button
+            driver.FindElement(By.Name("submit")).Click();
+
+            // Wait for success message
+            wait.Until(driver => driver.FindElement(By.CssSelector("div.goodresult")).Displayed &&
+                                 driver.FindElement(By.CssSelector("div.goodresult")).Text.Contains("Successfully updated your profile."));
+
+            // Assert success message
+            ClassicAssert.IsTrue(driver.FindElement(By.CssSelector("div.goodresult"))
+                .Displayed);
+            ClassicAssert.IsTrue(driver.FindElement(By.CssSelector("div.goodresult")).Text.Contains("Successfully updated your profile."));
+        }
+        [Test]
         public void UA06Logout_LoggedInUser_SuccessfulLogout()
         {
             Login();
